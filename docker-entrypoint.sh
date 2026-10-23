@@ -20,7 +20,7 @@ if [ -n "$APP_KEY" ]; then
 fi
 
 # Exécution des migrations si une base de données est accessible
-if [ -n "$DB_HOST" ] || [ -n "$DB_URL" ]; then
+if [ -n "$DB_HOST" ] || [ -n "$DB_URL" ] || [ -n "$DATABASE_URL" ]; then
     echo "Exécution des migrations de base de données..."
     php artisan migrate --force --no-interaction || true
 fi
