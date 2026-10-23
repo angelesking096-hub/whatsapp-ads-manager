@@ -1,0 +1,57 @@
+services:
+  # Service Web principal (Laravel 12 + Apache + PHP 8.2)
+  - type: web
+    name: whatsapp-ads-manager
+    runtime: docker
+    plan: free
+    region: frankfurt # ou oregon / ohio
+    healthCheckPath: /up
+    envVars:
+      - key: APP_NAME
+        value: "WhatsApp Ads Manager"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_URL
+        sync: false # Render remplira automatiquement l'URL https://whatsapp-ads-manager.onrender.com
+      - key: APP_TIMEZONE
+        value: Africa/Douala
+      - key: APP_LOCALE
+        value: fr
+      - key: APP_KEY
+        generateValue: true # Render génère une clé aléatoire ou vous pouvez coller la vôtre
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: FILESYSTEM_DISK
+        value: public
+      # Configuration de la base de données (PostgreSQL managée sur Render ou MySQL externe)
+      - key: DB_CONNECTION
+        value: pgsql # ou mysql
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      # Identifiants Meta WhatsApp (optionnels pour démarrage)
+      - key: WHATSAPP_GRAPH_VERSION
+        value: v23.0
+      - key: WHATSAPP_APP_ID
+        sync: false
+      - key: WHATSAPP_APP_SECRET
+        sync: false
+      - key: WHATSAPP_CONFIG_ID
+        sync: false
+      - key: WHATSAPP_WEBHOOK_VERIFY_TOKEN
+        sync: false
