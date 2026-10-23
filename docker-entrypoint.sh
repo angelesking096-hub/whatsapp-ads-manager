@@ -7,7 +7,8 @@ if [ -n "$PORT" ]; then
     sed -i "s/80/$PORT/g" /etc/apache2/ports.conf /etc/apache2/sites-available/*.conf
 fi
 
-# Lien symbolique pour le stockage public des médias
+# Découverte des packages et lien symbolique
+php artisan package:discover --ansi --no-interaction || true
 php artisan storage:link --no-interaction || true
 
 # Mise en cache de la configuration et des routes si la clé d'application est présente

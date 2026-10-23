@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json vite.config.js ./
 RUN npm install
 COPY resources/ ./resources/
+COPY app/ ./app/
 RUN npm run build
 
 # Étape 2 : Image d'exécution PHP 8.2 Apache
@@ -43,8 +44,8 @@ COPY . /var/www/html
 # Copie des assets frontend compilés depuis l'étape 1
 COPY --from=frontend /app/public/build /var/www/html/public/build
 
-# Installation des dépendances PHP pour la production (sans dev)
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Installation des dépendances PHP pour la production (sans dev et sans exécuter les scripts artisan)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # Permissions pour le stockage et le cache Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
