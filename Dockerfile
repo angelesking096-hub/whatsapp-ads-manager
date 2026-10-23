@@ -47,8 +47,14 @@ COPY --from=frontend /app/public/build /var/www/html/public/build
 # Installation des dépendances PHP pour la production (sans dev et sans exécuter les scripts artisan)
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
-# Permissions pour le stockage et le cache Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+# Création des dossiers de stockage requis et attribution des permissions
+RUN mkdir -p /var/www/html/storage/app/public \
+             /var/www/html/storage/framework/cache/data \
+             /var/www/html/storage/framework/sessions \
+             /var/www/html/storage/framework/views \
+             /var/www/html/storage/logs \
+             /var/www/html/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Script de démarrage
