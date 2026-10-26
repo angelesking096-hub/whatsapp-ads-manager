@@ -26,6 +26,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisteredUserController::class, 'store'])->middleware('throttle:5,1')->name('register.store');
 });
 
+use App\Http\Controllers\BroadcastController;
+use App\Http\Controllers\InboxController;
+use App\Http\Controllers\ProspectingController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\WhatsAppNumberController;
+
 Route::middleware('auth')->group(function () {
     // Super Administration Plateforme
     Route::middleware('super_admin')->prefix('admin')->name('admin.')->group(function () {
@@ -58,4 +64,35 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings/company', [SettingsController::class, 'updateCompany'])->name('settings.company.update');
     Route::put('/settings/whatsapp', [SettingsController::class, 'saveWhatsApp'])->name('settings.whatsapp.save');
     Route::delete('/settings/whatsapp', [SettingsController::class, 'deleteWhatsApp'])->name('settings.whatsapp.delete');
+
+    // NOUVELLES FONCTIONNALITÉS : MULTI-NUMÉROS WHATSAPP (10 SLOTS)
+    Route::get('/whatsapp-numbers', [WhatsAppNumberController::class, 'index'])->name('whatsapp-numbers.index');
+    Route::post('/whatsapp-numbers', [WhatsAppNumberController::class, 'store'])->name('whatsapp-numbers.store');
+    Route::put('/whatsapp-numbers/{account}', [WhatsAppNumberController::class, 'update'])->name('whatsapp-numbers.update');
+    Route::post('/whatsapp-numbers/{account}/toggle', [WhatsAppNumberController::class, 'toggleActive'])->name('whatsapp-numbers.toggle');
+    Route::delete('/whatsapp-numbers/{account}', [WhatsAppNumberController::class, 'destroy'])->name('whatsapp-numbers.destroy');
+
+    // PROSPECTION & SCRAPING IA ULTRA-CIBLÉ
+    Route::get('/prospecting', [ProspectingController::class, 'index'])->name('prospecting.index');
+    Route::post('/prospecting/search', [ProspectingController::class, 'search'])->name('prospecting.search');
+    Route::post('/prospecting/{lead}/import', [ProspectingController::class, 'importSingle'])->name('prospecting.import-single');
+    Route::post('/prospecting/import-all', [ProspectingController::class, 'importAll'])->name('prospecting.import-all');
+    Route::delete('/prospecting/{lead}', [ProspectingController::class, 'destroy'])->name('prospecting.destroy');
+    Route::post('/prospecting/clear', [ProspectingController::class, 'clearAll'])->name('prospecting.clear');
+
+    // DIFFUSIONS MULTI-NUMÉROS ROTATION & SPINTAX
+    Route::get('/broadcasts', [BroadcastController::class, 'index'])->name('broadcasts.index');
+    Route::get('/broadcasts/create', [BroadcastController::class, 'create'])->name('broadcasts.create');
+    Route::post('/broadcasts', [BroadcastController::class, 'store'])->name('broadcasts.store');
+    Route::get('/broadcasts/{broadcast}', [BroadcastController::class, 'show'])->name('broadcasts.show');
+    Route::delete('/broadcasts/{broadcast}', [BroadcastController::class, 'destroy'])->name('broadcasts.destroy');
+
+    // BOÎTE DE RÉCEPTION UNIFIÉE CRM MULTI-NUMÉROS
+    Route::get('/inbox', [InboxController::class, 'index'])->name('inbox.index');
+    Route::post('/inbox/reply', [InboxController::class, 'reply'])->name('inbox.reply');
+
+    // ABONNEMENT ET QUOTAS SAAS
+    Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
+    Route::post('/subscription/switch', [SubscriptionController::class, 'switchPlan'])->name('subscription.switch');
 });
+
