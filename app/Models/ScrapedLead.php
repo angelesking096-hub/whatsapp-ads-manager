@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ScrapedLead extends Model
 {
+    protected $table = 'scraped_leads';
+
     protected $fillable = [
         'tenant_id',
         'search_query',

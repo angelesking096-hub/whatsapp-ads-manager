@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BroadcastDispatch extends Model
 {
+    protected $table = 'broadcast_dispatches';
+
     protected $fillable = [
         'broadcast_id',
         'whatsapp_account_id',
